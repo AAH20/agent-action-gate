@@ -5,7 +5,8 @@ from pathlib import Path
 from typing import Any
 
 ROOT = Path(__file__).resolve().parent.parent
-DEFAULT_POLICY_PATH = ROOT / "fixtures" / "policy.default.json"
+PACKAGED = Path(__file__).resolve().parent / "policy.default.json"
+DEFAULT_POLICY_PATH = PACKAGED if PACKAGED.exists() else ROOT / "fixtures" / "policy.default.json"
 
 
 def load_policy(path: Path | None = None) -> dict[str, Any]:

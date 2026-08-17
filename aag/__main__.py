@@ -29,10 +29,18 @@ def main(argv: list[str] | None = None) -> int:
     chk.add_argument("path")
     chk.add_argument("--simulate", action="store_true")
     sub.add_parser("bench", help="Print illustrative cost-avoidance sketch")
+    sub.add_parser("serve", help="MCP stdio server (Gate/Prove tools, never executes)")
 
     args = parser.parse_args(argv)
     ledger = ActionLedger(Path(args.ledger))
     token = args.prove_token
+
+    if args.cmd == "serve":
+        from aag.gate import AgentActionGate
+        from aag.server import serve
+
+        serve(gate=AgentActionGate(ledger=ledger, prove_token=token))
+        return 0
 
     if args.cmd == "demo":
         if Path(args.ledger).exists():

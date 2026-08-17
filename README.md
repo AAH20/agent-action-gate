@@ -6,6 +6,8 @@ Normalize tool intent → deny unknown → **never treat model confidence as app
 
 Extracted from GRC_Claw `@grc-claw/agent-policy-firewall`. This repo is the sharp foundry slice: one command, no cathedral.
 
+<!-- mcp-name: io.github.AAH20/agent-action-gate -->
+
 **Commercial (how this is sold):** [$499 Instant Audit](https://a2zsoc.com/productized-services#instant-audit-tripwire) and [consultation](https://a2zsoc.com/consultation) on [a2zsoc.com](https://a2zsoc.com).
 
 ## Why this exists (revenue + cost)
@@ -44,6 +46,35 @@ PYTHONPATH=. python3 -m aag check fixtures/proved_decommission.json --prove-toke
 
 Kill-switch: `AAG_KILL_SWITCH=1` or touch `artifacts/KILL`.
 
+## MCP stdio server
+
+This process **never executes** tools. Clients call `gate_check` before they would invoke a destructive tool.
+
+```bash
+PYTHONPATH=. python3 -m aag serve
+```
+
+Cursor / Claude example (`mcpServers`):
+
+```json
+{
+  "agent-action-gate": {
+    "command": "python3",
+    "args": ["-m", "aag", "serve"],
+    "cwd": "/path/to/agent-action-gate",
+    "env": { "PYTHONPATH": ".", "AAG_PROVE_TOKEN": "replace-me" }
+  }
+}
+```
+
+Docker / registry image:
+
+```bash
+docker run --rm -i ghcr.io/aah20/agent-action-gate:0.2.0
+```
+
+Official MCP Registry name: `io.github.AAH20/agent-action-gate`
+
 ## Envelope
 
 Every decision includes:
@@ -54,9 +85,9 @@ Every decision includes:
 - `ledger_id` / `receipt_hash`
 - CTAs: Instant Audit + consultation
 
-## MCP wrap (stub)
+## Library mapper
 
-Map an MCP `tools/call` onto the gate. Do not execute the tool unless `allow_auto_execute` is true.
+Same Gate/Prove policy from Python without the stdio loop:
 
 ```python
 from aag.gate import AgentActionGate
@@ -82,11 +113,13 @@ evaluate_mcp_call(gate, {"params": {"name": "shell.exec", "arguments": {"note": 
 aag/
   gate.py      HITL + kill-switch + unknown deny
   ledger.py    hash-chained JSONL
+  server.py    MCP stdio (gate_check, ledger_verify)
   mcp.py       MCP tools/call mapper (no execution)
   cost.py      illustrative avoidance sketch
   demo.py      fixture runner
 fixtures/      ATT&CK-tagged cases
-tests/         Gate/Prove contract
+server.json    MCP Registry metadata
+tests/         Gate/Prove + MCP contract
 ```
 
 ## Paid evaluation (not free prove)
