@@ -1,5 +1,7 @@
 artifacts/
 *.mcpb
+mcp-publisher
+__pycache__/
 __pycache__/
 *.pyc
 .venv/
