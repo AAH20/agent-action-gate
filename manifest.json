@@ -1,0 +1,45 @@
+{
+  "manifest_version": "0.3",
+  "name": "agent-action-gate",
+  "display_name": "Agent Action Gate",
+  "version": "0.2.0",
+  "description": "Gate/Prove MCP server: deny unattended destructive, provision, and decommission tool calls. Never executes tools.",
+  "author": {
+    "name": "Ahmed Hassan",
+    "url": "https://a2zsoc.com/consultation"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AAH20/agent-action-gate.git"
+  },
+  "homepage": "https://a2zsoc.com/productized-services#instant-audit-tripwire",
+  "license": "MIT",
+  "server": {
+    "type": "python",
+    "entry_point": "aag/__main__.py",
+    "mcp_config": {
+      "command": "python3",
+      "args": ["-m", "aag", "serve"],
+      "env": {
+        "PYTHONPATH": "${__dirname}"
+      }
+    }
+  },
+  "user_config": {
+    "prove_token": {
+      "type": "string",
+      "title": "AAG_PROVE_TOKEN",
+      "description": "HITL prove token required with approved=true for high-tier ALLOW",
+      "sensitive": true,
+      "required": false
+    }
+  },
+  "tools": [
+    { "name": "gate_check", "description": "Evaluate a proposed tool call. Never executes it." },
+    { "name": "ledger_verify", "description": "Verify Action Ledger hash chain." }
+  ],
+  "compatibility": {
+    "platforms": ["darwin", "win32", "linux"],
+    "runtimes": { "python": ">=3.10" }
+  }
+}

@@ -11,27 +11,12 @@
   "websiteUrl": "https://a2zsoc.com/consultation",
   "packages": [
     {
-      "registryType": "oci",
-      "identifier": "ghcr.io/aah20/agent-action-gate:0.2.0",
+      "registryType": "mcpb",
+      "identifier": "https://github.com/AAH20/agent-action-gate/releases/download/v0.2.0/agent-action-gate.mcpb",
+      "fileSha256": "4c74429173ec412ebdebd701f59d4aba9c37aad501d35ab9022920ddca2f7f28",
       "transport": {
         "type": "stdio"
-      },
-      "environmentVariables": [
-        {
-          "name": "AAG_PROVE_TOKEN",
-          "description": "HITL prove token required with approved=true for high-tier ALLOW",
-          "isRequired": false,
-          "isSecret": true,
-          "format": "string"
-        },
-        {
-          "name": "AAG_KILL_SWITCH",
-          "description": "Set to 1 to deny every tool call",
-          "isRequired": false,
-          "isSecret": false,
-          "format": "string"
-        }
-      ]
+      }
     }
   ]
 }
